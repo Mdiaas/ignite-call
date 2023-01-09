@@ -1,24 +1,24 @@
-import { Avatar, Heading, Text } from "@ignite-ui/react";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { prisma } from "../../../lib/prisma";
-import { ScheduleForm } from "./ScheduleForm";
-import { Container, UserHeader } from "./styles";
+import { Avatar, Heading, Text } from '@ignite-ui/react'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import { prisma } from '../../../lib/prisma'
+import { ScheduleForm } from './ScheduleForm'
+import { Container, UserHeader } from './styles'
 
-interface ScheduleProps{
-  user:{
-    name: string,
-    avatarUrl: string,
-    bio:string
+interface ScheduleProps {
+  user: {
+    name: string
+    avatarUrl: string
+    bio: string
   }
 }
-export default function Schedule( {user} : ScheduleProps){
+export default function Schedule({ user }: ScheduleProps) {
   const { name, avatarUrl, bio } = user
   return (
     <Container>
       <UserHeader>
-          <Avatar src={avatarUrl} />
-          <Heading>{name}</Heading>
-          <Text>{bio}</Text>
+        <Avatar src={avatarUrl} />
+        <Heading>{name}</Heading>
+        <Text>{bio}</Text>
       </UserHeader>
       <ScheduleForm />
     </Container>
@@ -26,33 +26,33 @@ export default function Schedule( {user} : ScheduleProps){
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  return{
+  return {
     paths: [],
-    fallback: "blocking"
+    fallback: 'blocking',
   }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const username = String(params?.username)
   const user = await prisma.user.findUnique({
-    where:{
-      username
-    }
+    where: {
+      username,
+    },
   })
-  
-  if(!user){
-    return { 
-      notFound: true
+
+  if (!user) {
+    return {
+      notFound: true,
     }
   }
   return {
-    props:{
-      user:{
+    props: {
+      user: {
         name: user.name,
         bio: user.bio,
-        avatarUrl: user.avatar_url
-      }
+        avatarUrl: user.avatar_url,
+      },
     },
-    revalidate: 60 * 60 * 24 //1 day
+    revalidate: 60 * 60 * 24, // 1 day
   }
 }
