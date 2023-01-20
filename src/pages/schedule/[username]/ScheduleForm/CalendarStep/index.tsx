@@ -16,7 +16,10 @@ interface Availability {
   possibleTimes: number[]
   availableTimes: number[]
 }
-export function CalendarStep() {
+interface CalendarStepProps {
+  onSelectDateTime: (date: Date) => void
+}
+export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const isDateSelected = !!selectedDate
   const router = useRouter()
@@ -39,6 +42,13 @@ export function CalendarStep() {
     },
   )
 
+  function handleSelectTime(time: number) {
+    const dateWithTime = dayjs(selectedDate)
+      .set('hour', time)
+      .startOf('hour')
+      .toDate()
+    onSelectDateTime(dateWithTime)
+  }
   const weekDay = selectedDate ? dayjs(selectedDate).format('dddd') : null
   const selectedDay = selectedDate
     ? dayjs(selectedDate).format('DD [ de ] MMMM')
@@ -57,6 +67,7 @@ export function CalendarStep() {
                 <TimePickerItem
                   key={time}
                   disabled={!availability.availableTimes.includes(time)}
+                  onClick={() => handleSelectTime(time)}
                 >
                   {String(time).padStart(2, '0')}:00
                 </TimePickerItem>

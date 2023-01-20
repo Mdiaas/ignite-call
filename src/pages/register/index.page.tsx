@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { api } from '../../lib/axios'
 import { AxiosError } from 'axios'
+import { NextSeo } from 'next-seo'
 const RegisterFormSchema = z.object({
   username: z
     .string()
@@ -58,42 +59,45 @@ export default function Register() {
     }
   }
   return (
-    <Container>
-      <Header>
-        <Heading as="strong">Bem-vindo ao Ignite Call!</Heading>
-        <Text>
-          Precisamos de algumas informações para criar seu perfil! Ah, você pode
-          editar essas informações depois.
-        </Text>
-        <MultiStep size={4} currentStep={1}></MultiStep>
-      </Header>
+    <>
+      <NextSeo title="Criar uma conta| Ignite Call" />
+      <Container>
+        <Header>
+          <Heading as="strong">Bem-vindo ao Ignite Call!</Heading>
+          <Text>
+            Precisamos de algumas informações para criar seu perfil! Ah, você
+            pode editar essas informações depois.
+          </Text>
+          <MultiStep size={4} currentStep={1}></MultiStep>
+        </Header>
 
-      <Form as="form" onSubmit={handleSubmit(handleRegister)}>
-        <label>
-          <Text size="sm">Nome de usuário</Text>
-          <TextInput
-            prefix="schedule.com/"
-            placeholder="seu-usuário"
-            {...register('username')}
-          ></TextInput>
-          {errors.username && (
-            <FormError size="sm">{errors.username.message}</FormError>
-          )}
-        </label>
-        <label>
-          <Text size="sm">Nome completo</Text>
-          <TextInput
-            placeholder="seu nome"
-            {...register('fullname')}
-          ></TextInput>
-          {errors.fullname && (
-            <FormError size="sm">{errors.fullname.message}</FormError>
-          )}
-        </label>
-        <Button type="submit" disabled={isSubmitting}>
-          Próximo passo <ArrowRight></ArrowRight>
-        </Button>
-      </Form>
-    </Container>
+        <Form as="form" onSubmit={handleSubmit(handleRegister)}>
+          <label>
+            <Text size="sm">Nome de usuário</Text>
+            <TextInput
+              prefix="schedule.com/"
+              placeholder="seu-usuário"
+              {...register('username')}
+            ></TextInput>
+            {errors.username && (
+              <FormError size="sm">{errors.username.message}</FormError>
+            )}
+          </label>
+          <label>
+            <Text size="sm">Nome completo</Text>
+            <TextInput
+              placeholder="seu nome"
+              {...register('fullname')}
+            ></TextInput>
+            {errors.fullname && (
+              <FormError size="sm">{errors.fullname.message}</FormError>
+            )}
+          </label>
+          <Button type="submit" disabled={isSubmitting}>
+            Próximo passo <ArrowRight></ArrowRight>
+          </Button>
+        </Form>
+      </Container>
+    </>
   )
 }
